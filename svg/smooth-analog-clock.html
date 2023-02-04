@@ -1,36 +1,98 @@
-<!DOCTYPE html><html><body>
+<!DOCTYPE html><html>
+<head>
+<title>banga clock</title>
+<style>
+.theme-light {
+	--color-hour: black;
+	--color-min: #868686;
+	--color-sec: red;
+	--color-bg: #fff;
+	--fade-opacity: 1;
+}
+.theme-dark {
+	--color-hour: #17ed90;
+	--color-min: #54abb9;
+	--color-sec:red;
+	--color-bg: #000;
+	--fade-opacity: 0;
+}
 
-<svg id="analog_clock" viewBox="-250 -250 500 500" width="501" height="501" style="visibility: hidden; border: 0px solid red;">
+body{
+	background-color: var(--color-bg);
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	margin: 0px;
+	height: 100vh;
+}
+
+svg#analog_clock {height: 95%; width: 95%;}
+svg#analog_clock .mh   {fill: url(#mhGradient)}
+svg#analog_clock .mm   {fill: url(#mmGradient)}
+svg#analog_clock .ghour{fill: url(#hourGradient)}
+svg#analog_clock .gmin {fill: url(#minGradient)}
+svg#analog_clock .gsec {fill: url(#secGradient)}
+svg#analog_clock .sec {stop-color: var(--color-sec) ;fill: var(--color-sec);}
+svg#analog_clock .min {stop-color: var(--color-min) ;fill: var(--color-min);}
+svg#analog_clock .hour{stop-color: var(--color-hour);fill: var(--color-hour);}
+svg#analog_clock .fadeh{stop-color: var(--color-hour);stop-opacity: var(--fade-opacity);}
+svg#analog_clock .fadem{stop-color: var(--color-min) ;stop-opacity: var(--fade-opacity);}
+svg#analog_clock .fades{stop-color: var(--color-sec) ;stop-opacity: var(--fade-opacity);}
+/* svg:not([fill]),
+svg *:not([fill]) {
+	fill: var(--color-hour);
+} */
+</style>
+</head>
+<body onclick="toggleTheme()" onkeydown="event.key==' ' && toggleTheme()">
+
+<svg id="analog_clock" viewBox="-250 -250 500 500" style="visibility: hidden; border: 0px solid red;">
+	<defs>
+		<linearGradient id="hourGradient" gradientTransform="rotate(90)">
+			<stop offset=".1" class="hour"/>
+			<stop offset=".9" class="fadeh"/>
+		</linearGradient>
+		<linearGradient id="minGradient" gradientTransform="rotate(90)">
+			<stop offset=".1" class="min"/>
+			<stop offset=".91" class="fadem"/>
+		</linearGradient>
+		<linearGradient id="secGradient" gradientTransform="rotate(90)">
+			<stop offset=".1" class="sec"/>
+			<stop offset=".92" class="fades"/>
+		</linearGradient>
+		<linearGradient id="mhGradient" gradientTransform="rotate(90)">
+			<stop offset="0" class="fadeh"/>
+			<stop offset="1" class="hour" stop-opacity=".7"/>
+		</linearGradient>
+		<linearGradient id="mmGradient" gradientTransform="rotate(90)">
+			<stop offset="0" class="fadem"/>
+			<stop offset="1" class="min" stop-opacity=".5"/>
+		</linearGradient>
+	</defs>
 	<path id="mh" d="M0,18 L5,0 C 6.9,-9 -6.9,-9 -5,0 Z"
-		stroke="black" stroke-width="0" stroke-linecap="round" stroke-linejoin="miter"
-		transform="translate(0,-243)" />
-	<path d="M0,-170 L9,0 C 9,12 -9,12 -9,0 Z" fill="black" stroke-width="10">
+		stroke-width="0" stroke-linecap="round" stroke-linejoin="miter"
+		transform="translate(0,-300)" />
+	<path d="M0,-170 L9,0 C 9,12 -9,12 -9,0 Z" stroke-width="10" class="ghour">
 	<animateTransform
 		id="ah"
 		attributeName="transform"
 		type="rotate"
-		from="0 0 0"
-		to="360 0 0"
 		dur="12h"
 		repeatCount="indefinite" />
 	</path>
-	<path d="M0,-238 L6,0 C 6,8 -6,8 -6,0 Z" fill="grey" stroke-width="0">
+	<path d="M0,-238 L6,0 C 6,8 -6,8 -6,0 Z" stroke-width="0" class="gmin">
 	<animateTransform
 		id="am"
 		attributeName="transform"
 		type="rotate"
-		from="0 0 0"
-		to="360 0 0"
 		dur="1h"
 		repeatCount="indefinite" />
 	</path>
-	<path d="M0,-238 L3,0 C 3,4 -3,4 -3,0 Z" fill="red" stroke-width="0">
+	<path d="M0,-238 L3,0 C 3,4 -3,4 -3,0 Z" stroke-width="0" class="gsec">
 	<animateTransform
 		id="as"
 		attributeName="transform"
 		type="rotate"
-		from="0 0 0"
-		to="360 0 0"
 		dur="60s"
 		repeatCount="indefinite" />
 	</path>
@@ -45,21 +107,33 @@
 	,	sec=now.getSeconds()+now.getMilliseconds()/1000
 	,	min=now.getMinutes()+sec/60
 	,	hrs=now.getHours()+min/60
-	as.setAttribute('from',as.getAttribute('from').replace(/\d+/,sec*6))
-	as.setAttribute('to'  ,as.getAttribute('to'  ).replace(/\d+/,360+sec*6))
-	am.setAttribute('from',am.getAttribute('from').replace(/\d+/,min*6))
-	am.setAttribute('to'  ,am.getAttribute('to'  ).replace(/\d+/,360+min*6))
-	ah.setAttribute('from',ah.getAttribute('from').replace(/\d+/,hrs*30))
-	ah.setAttribute('to'  ,ah.getAttribute('to'  ).replace(/\d+/,360+hrs*30))
+	as.setAttribute('from',sec*6+' 0 0')
+	as.setAttribute('to'  ,360+sec*6+' 0 0')
+	am.setAttribute('from',min*6+' 0 0')
+	am.setAttribute('to'  ,360+min*6+' 0 0')
+	ah.setAttribute('from',hrs*30+' 0 0')
+	ah.setAttribute('to'  ,360+hrs*30+' 0 0')
 
-	for(let i=1;i<60;) clock.insertAdjacentHTML('afterbegin',
+	for(let i=0;i<60;) clock.querySelector('#mh').insertAdjacentHTML('afterend',
 		`<use href='#mh'
 		${i%5==0
-			? `transform="rotate(${i++*6 } 0 0)"`
-			: `transform-origin="0 250" transform="scale(.5) translate(0,-500) rotate(${i++*6 } 0 0)" fill="grey"`
+			? `class="mh" transform="rotate(${i++*6 } 0 0) translate(0,57) "`
+			: `class="mm" transform-origin="0 250" transform="scale(.5) translate(0,-500) rotate(${i++*6 } 0 0) translate(0,57)"`
 		} />`)
 
+	function setTheme(themeName="theme-dark") {
+		localStorage.setItem('theme', themeName);
+		document.documentElement.className = themeName;
+	}
+
+	function toggleTheme() {
+		if (localStorage.getItem('theme') === 'theme-dark') {
+			setTheme('theme-light');
+		} else {
+			setTheme('theme-dark');
+		}
+	}
+	localStorage.getItem('theme') && setTheme(localStorage.getItem('theme')) || setTheme()
 	clock.style.visibility=''
 </script>
-
 </body></html>
