@@ -71,7 +71,7 @@ svg *:not([fill]) {
 	</defs>
 	<path id="mh" d="M0,18 L5,0 C 6.9,-9 -6.9,-9 -5,0 Z"
 		stroke-width="0" stroke-linecap="round" stroke-linejoin="miter"
-		transform="translate(0,-300)" />
+		transform="translate(0,-10300)" />
 	<path d="M0,-170 L9,0 C 9,12 -9,12 -9,0 Z" stroke-width="10" class="ghour">
 	<animateTransform
 		id="ah"
@@ -117,8 +117,8 @@ svg *:not([fill]) {
 	for(let i=0;i<60;) clock.querySelector('#mh').insertAdjacentHTML('afterend',
 		`<use href='#mh'
 		${i%5==0
-			? `class="mh" transform="rotate(${i++*6 } 0 0) translate(0,57) "`
-			: `class="mm" transform-origin="0 250" transform="scale(.5) translate(0,-500) rotate(${i++*6 } 0 0) translate(0,57)"`
+			? `class="mh" transform="rotate(${i++*6 } 0 0) translate(0,10057) "`
+			: `class="mm" transform-origin="0 250" transform="scale(.5) translate(0,-500) rotate(${i++*6 } 0 0) translate(0,10057)"`
 		} />`)
 
 	function setTheme(themeName="theme-dark") {
